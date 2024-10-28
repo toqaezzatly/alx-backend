@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
-"""
-Simple pagination
-"""
+""" Simple pagination """
 import csv
 import math
 from typing import List
-index_range = __import__('0-simple_helper_function').index_range
+
+
+def index_range(page, page_size):
+    """ return a tuple of size two containing a start index and an end index
+        corresponding to the range of indexes to return in a list for those
+        particular pagination parameters. """
+    if page and page_size:
+        start_index = (page - 1) * page_size
+        end_index = start_index + page_size
+        return start_index, end_index
 
 
 class Server:
     """Server class to paginate a database of popular baby names.
     """
-    DATA_FILE = "C:\\Users\\toqae\\Documents\\GitHub\\alx-backend\\0x00-pagination\\Popular_Baby_Names.csv"
+    DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
         self.__dataset = None
@@ -28,12 +35,13 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        assert isinstance(page, int) and isinstance(page_size, int)
-        assert isinstance(page_size, int) and page_size > 0
-
-        start_index, end_index = index_range(page, page_size)
-        dataset = self.dataset()
-
-        if start_index > len(dataset):
-            return []
-        return dataset[start_index:end_index]
+        """ obtains the indexes and return corresponding pages """
+        assert type(page) == int and page > 0
+        assert type(page_size) == int and page_size > 0
+        start, end = index_range(page, page_size)
+        pages = []
+        if start >= len(self.dataset()):
+            return pages
+        pages = self.dataset()
+        return pages[start:end]
+    
