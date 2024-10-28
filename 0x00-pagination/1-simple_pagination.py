@@ -18,8 +18,7 @@ def index_range(page, page_size):
 class Server:
     """Server class to paginate a database of popular baby names.
     """
-    DATA_FILE = "Popular_Baby_Names.csv"
-
+    DATA_FILE = "C:\\Users\\toqae\\Documents\\GitHub\\alx-backend\\0x00-pagination\\Popular_Baby_Names.csv"
     def __init__(self):
         self.__dataset = None
 
@@ -44,4 +43,3 @@ class Server:
             return pages
         pages = self.dataset()
         return pages[start:end]
-    
