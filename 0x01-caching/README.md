@@ -57,6 +57,22 @@ This project includes a base class `BaseCaching` that provides the foundation fo
 5. **LFU (Least Frequently Used)**:
    - The item that has been accessed the least frequently is removed.
 
+Here’s a table comparing common caching replacement algorithms along with examples from real systems:
+
+| Algorithm                   | Description                                                                                                       | Real-World Example                                                         | Example in Use                                                        |
+|-----------------------------|-------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| **Least Recently Used (LRU)** | Evicts the least recently accessed items first, as they’re considered less likely to be used again soon.         | **Linux Page Cache, Redis**                                                | If a cache stores `{A, B, C}`, accessing `A` makes `B` the oldest. Adding `D` will evict `B`.  |
+| **Least Frequently Used (LFU)** | Evicts the least frequently accessed items, prioritizing items with high access counts.                          | **Redis, Memcached**                                                       | For `{A(4), B(2), C(3)}`, `B` is evicted if cache is full and `D` is added. |
+| **First-In-First-Out (FIFO)**  | Evicts the oldest item in the cache, based on insertion time, rather than access time or frequency.             | **Networking Buffers, Simplified Caches**                                  | `{A, B, C}`, `A` is removed when `D` is added.                          |
+| **Random Replacement**         | Removes an item at random to allow for a simple, low-overhead eviction process.                                 | **Google Chrome Browser Cache**                                            | Cache has `{A, B, C}`, adding `D` might evict any of `A, B, or C`.       |
+| **Least Recently/Frequently Used (LRFU)** | Combines LRU and LFU to maintain a balance between recency and frequency.                           | **Modern CPU Caches**                                                      | `{A(4), B(2), C(3)}` with `B` and `C` having recent accesses, `A` may be evicted. |
+| **Clock (Second Chance)**      | Gives recently used items a “second chance” by using a circular buffer with a reference bit for each item.     | **Operating System Paging (Linux)**                                        | `{A, B, C}` items have reference bits; if `A` and `B` are used, `C` might be removed. |
+| **Most Recently Used (MRU)**   | Evicts the most recently accessed item, used when newer data is considered less likely to be reused.           | **Databases with Hot Data Loads**                                          | `{A, B, C}` with recent access to `C`; adding `D` would evict `C`.        |
+| **Adaptive Replacement Cache (ARC)** | Balances between LRU and MRU based on real-time access patterns, dynamically adjusting to access trends. | **IBM Storage and ZFS Filesystems**                                        | Adjusts dynamically: if `A, B` are accessed frequently and `C` is old, `C` may be evicted. |
+| **Segmented LRU (SLRU)**       | Divides cache into segments, where frequently used items are promoted to a protected segment to avoid eviction. | **Apache Web Server Cache**                                                | Cache divided into `protected` and `probationary` segments; frequent access promotes items to avoid eviction.|
+
+Each algorithm has unique trade-offs in performance, efficiency, and memory overhead, making them suitable for different types of caching in real systems.
+
 ## Usage
 
 Each caching policy class should implement the `put()` and `get()` methods:
