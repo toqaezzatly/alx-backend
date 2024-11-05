@@ -6,6 +6,7 @@ Basic Flask app with Babel for i18n
 from flask import Flask, render_template, request
 from flask_babel import Babel
 
+
 app = Flask(__name__)
 
 
