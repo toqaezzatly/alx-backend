@@ -1,0 +1,1 @@
+This is as temp readme file about i18n
